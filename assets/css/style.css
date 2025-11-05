@@ -1,0 +1,50 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background: #fdfbf7;
+  color: #2b2b2b;
+  scroll-behavior: smooth;
+}
+
+/* Navbar scroll tint */
+#navbar.scrolled {
+  background-color: #fff3e0 !important;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+/* FIX: Mobile menu visibility for smaller screens */
+/* The element has "hidden md:flex" in HTML. We override 'hidden' with 'flex' only when the 'show' class is present */
+#menu:not(.md\:flex):not(.hidden) {
+  display: none; /* Hide by default on small screens */
+}
+
+/* Apply show class on mobile when toggled */
+#menu.show {
+  display: flex !important; /* Force display flex when 'show' is present */
+  position: absolute;
+  top: 100%; /* Position below the navbar */
+  left: 0;
+  right: 0;
+  background-color: white;
+  padding: 10px 20px;
+  border-top: 1px solid #eee;
+  flex-direction: column;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+#menu.show li {
+  padding: 10px 0;
+  text-align: center;
+  border-bottom: 1px solid #f5f5f5;
+}
+
+#menu.show li:last-child {
+  border-bottom: none;
+}
+/* End of Mobile Menu Fix */
+
+
+/* Animation helpers */
+@keyframes fadeIn {from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
+.animate-fade-in {animation: fadeIn 1s ease forwards;}
