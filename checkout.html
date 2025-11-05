@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Checkout — K&R Resto</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="assets/css/style.css">
+ <script src="https://www.paypal.com/sdk/js?client-id=YOUR_CLIENT_ID&currency=PHP"></script>
+</head>
+<body class="bg-[#fdfbf7] text-[#2b2b2b] font-sans">
+
+  <nav class="fixed w-full bg-white shadow-md z-50 py-4 text-center text-[#c98a00] font-bold text-2xl">K&R Resto</nav>
+
+  <section class="pt-32 pb-20 text-center">
+    <h1 class="text-4xl font-bold text-[#c98a00] mb-6">Checkout</h1>
+    <div class="max-w-lg mx-auto bg-white rounded-2xl shadow-lg p-8">
+      <h2 class="text-2xl text-[#c98a00] mb-4">Your Total</h2>
+      <p id="checkout-total" class="text-3xl font-semibold mb-6">₱0.00</p>
+      
+      <div id="paypal-button-container"></div> 
+      
+      <div id="payment-success" class="hidden mt-8">
+        <p class="text-green-600 font-semibold mb-4 text-lg">✅ Payment successful! Thank you for your order.</p>
+        <a href="index.html" class="bg-[#c98a00] hover:bg-[#e6a600] text-white font-semibold py-2 px-6 rounded-lg transition">Return Home</a>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const total = parseFloat(localStorage.getItem('cartTotal')) || 0;
+    document.getElementById('checkout-total').textContent = '₱' + total.toFixed(2);
+
+    // Only render the PayPal button if there is a total amount greater than zero
+    if (total > 0) {
+        paypal.Buttons({
+          style: { color:'gold', shape:'pill', label:'pay' },
+          createOrder: (data, actions) => actions.order.create({
+            purchase_units:[{ amount:{ currency_code:'PHP', value: total.toFixed(2) } }]
+          }),
+          onApprove: (data, actions) => actions.order.capture().then(()=>{
+            // Logic to show the success message and hide the button:
+            document.getElementById('paypal-button-container').classList.add('hidden'); 
+            document.getElementById('payment-success').classList.remove('hidden'); 
+            localStorage.clear();
+          })
+        }).render('#paypal-button-container');
+    } else {
+        // Display a message if the cart is empty
+        document.getElementById('paypal-button-container').innerHTML = '<p class="text-red-500">Your cart is empty. Please add items to place an order.</p>';
+    }
+  </script>
+</body>
+</html>
